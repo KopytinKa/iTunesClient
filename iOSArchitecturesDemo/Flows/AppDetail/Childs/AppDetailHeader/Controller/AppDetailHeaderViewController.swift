@@ -50,5 +50,4 @@ class AppDetailHeaderViewController: UIViewController {
             self?.appDetailHeaderView.imageView.image = image
         }
     }
-    
 }
