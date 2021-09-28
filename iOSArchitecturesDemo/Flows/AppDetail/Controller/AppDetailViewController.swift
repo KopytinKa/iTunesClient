@@ -13,6 +13,7 @@ final class AppDetailViewController: UIViewController {
     public var app: ITunesApp!
     
     lazy var headerViewController = AppDetailHeaderViewController(app: app)
+    lazy var whatsNewViewController = AppDetailWhatsNewViewController(app: app)
     
     private var appDetailView: AppDetailView {
         return self.view as! AppDetailView
@@ -34,6 +35,7 @@ final class AppDetailViewController: UIViewController {
     private func setupViews() {
         self.configureNavigationController()
         self.addHeaderViewController()
+        self.addWhatsNewViewController()
     }
     
     private func configureNavigationController() {
@@ -53,6 +55,21 @@ final class AppDetailViewController: UIViewController {
             self.headerViewController.view.topAnchor.constraint(equalTo: self.view.topAnchor),
             self.headerViewController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor),
             self.headerViewController.view.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+        ])
+    }
+    
+    private func addWhatsNewViewController() {
+        self.addChild(self.whatsNewViewController)
+        
+        self.view.addSubview(self.whatsNewViewController.view)
+        self.whatsNewViewController.didMove(toParent: self)
+        
+        self.whatsNewViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            self.whatsNewViewController.view.topAnchor.constraint(equalTo: self.headerViewController.view.bottomAnchor, constant: 16),
+            self.whatsNewViewController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.whatsNewViewController.view.rightAnchor.constraint(equalTo: self.view.rightAnchor),
         ])
     }
 }
