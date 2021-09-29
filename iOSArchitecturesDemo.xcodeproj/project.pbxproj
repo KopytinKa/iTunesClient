@@ -19,6 +19,10 @@
 		8BFE8758270338C5004325E4 /* DownloadAppsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFE8757270338C5004325E4 /* DownloadAppsService.swift */; };
 		8BFE875A270380A8004325E4 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFE8759270380A8004325E4 /* SearchViewModel.swift */; };
 		8BFE875D27038104004325E4 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFE875C27038104004325E4 /* Observer.swift */; };
+		8BFE87602704B8C1004325E4 /* SearchSongRouterIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFE875F2704B8C1004325E4 /* SearchSongRouterIO.swift */; };
+		8BFE87622704B8DF004325E4 /* SearchSongRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFE87612704B8DF004325E4 /* SearchSongRouter.swift */; };
+		8BFE87652704BA95004325E4 /* SearchSongInteractorIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFE87642704BA95004325E4 /* SearchSongInteractorIO.swift */; };
+		8BFE87672704BAE6004325E4 /* SearchSongInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFE87662704BAE6004325E4 /* SearchSongInteractor.swift */; };
 		DBB770B226F5018F00B7C57D /* UIView+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB770B126F5018F00B7C57D /* UIView+Preview.swift */; };
 		DBB770B826F508DB00B7C57D /* AppDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB770B726F508DB00B7C57D /* AppDetailHeaderView.swift */; };
 		DBB770BA26F510CC00B7C57D /* AppDetailHeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB770B926F510CC00B7C57D /* AppDetailHeaderViewController.swift */; };
@@ -58,6 +62,10 @@
 		8BFE8757270338C5004325E4 /* DownloadAppsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadAppsService.swift; sourceTree = "<group>"; };
 		8BFE8759270380A8004325E4 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		8BFE875C27038104004325E4 /* Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
+		8BFE875F2704B8C1004325E4 /* SearchSongRouterIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSongRouterIO.swift; sourceTree = "<group>"; };
+		8BFE87612704B8DF004325E4 /* SearchSongRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSongRouter.swift; sourceTree = "<group>"; };
+		8BFE87642704BA95004325E4 /* SearchSongInteractorIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSongInteractorIO.swift; sourceTree = "<group>"; };
+		8BFE87662704BAE6004325E4 /* SearchSongInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSongInteractor.swift; sourceTree = "<group>"; };
 		8EEA6AF9F424A0D5873D2723 /* Pods_iOSArchitecturesDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOSArchitecturesDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A067E149D296BC0C249FD11F /* Pods-iOSArchitecturesDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSArchitecturesDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOSArchitecturesDemo/Pods-iOSArchitecturesDemo.release.xcconfig"; sourceTree = "<group>"; };
 		DBB770B126F5018F00B7C57D /* UIView+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Preview.swift"; sourceTree = "<group>"; };
@@ -136,6 +144,8 @@
 			isa = PBXGroup;
 			children = (
 				8BFE874427023A56004325E4 /* Assembly */,
+				8BFE87632704BA3A004325E4 /* Interactor */,
+				8BFE875E2704B88A004325E4 /* Router */,
 				8BFE874527023A60004325E4 /* Presenter */,
 				8BFE874627023A68004325E4 /* View */,
 				8BFE874727023A6C004325E4 /* Controller */,
@@ -192,6 +202,24 @@
 				8BFE875C27038104004325E4 /* Observer.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		8BFE875E2704B88A004325E4 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				8BFE875F2704B8C1004325E4 /* SearchSongRouterIO.swift */,
+				8BFE87612704B8DF004325E4 /* SearchSongRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		8BFE87632704BA3A004325E4 /* Interactor */ = {
+			isa = PBXGroup;
+			children = (
+				8BFE87642704BA95004325E4 /* SearchSongInteractorIO.swift */,
+				8BFE87662704BAE6004325E4 /* SearchSongInteractor.swift */,
+			);
+			path = Interactor;
 			sourceTree = "<group>";
 		};
 		DB95456C2F2DCD400ABCE8E9 /* Frameworks */ = {
@@ -604,16 +632,20 @@
 				E0E1D2952034A3350011E01A /* SearchViewController.swift in Sources */,
 				8BFE874027022174004325E4 /* AppDetailWhatsNewViewController.swift in Sources */,
 				DBB770BA26F510CC00B7C57D /* AppDetailHeaderViewController.swift in Sources */,
+				8BFE87602704B8C1004325E4 /* SearchSongRouterIO.swift in Sources */,
 				E0E1D39F203AE7400011E01A /* ImageDownloader.swift in Sources */,
 				DBB770B226F5018F00B7C57D /* UIView+Preview.swift in Sources */,
+				8BFE87622704B8DF004325E4 /* SearchSongRouter.swift in Sources */,
 				F8114FBE22A3DBF400102830 /* SearchView.swift in Sources */,
 				8BFE875D27038104004325E4 /* Observer.swift in Sources */,
 				E0E1D395203AE5E20011E01A /* ITunesSearchResult.swift in Sources */,
 				E0E1D392203AE58B0011E01A /* ITunesSearchService.swift in Sources */,
+				8BFE87652704BA95004325E4 /* SearchSongInteractorIO.swift in Sources */,
 				8BFE874F2702FEC7004325E4 /* SearchSongAssembly.swift in Sources */,
 				E0E1D2932034A3350011E01A /* AppDelegate.swift in Sources */,
 				E0E1D384203AE3620011E01A /* AppStartManager.swift in Sources */,
 				F8114FC122A3E5EE00102830 /* AppCellModel.swift in Sources */,
+				8BFE87672704BAE6004325E4 /* SearchSongInteractor.swift in Sources */,
 				DBB770C226F5178400B7C57D /* SearchAssembly.swift in Sources */,
 				8BFE874B27023B57004325E4 /* SongCell.swift in Sources */,
 				8BFE87512702FEF1004325E4 /* SearchSongPresenter.swift in Sources */,
