@@ -10,6 +10,8 @@ import UIKit
 
 final class AppCell: UITableViewCell {
     
+    var onDownloadButtonPressed: ((UITableViewCell) -> Void)?
+    
     // MARK: - Subviews
     
     private(set) lazy var titleLabel: UILabel = {
@@ -36,6 +38,15 @@ final class AppCell: UITableViewCell {
         return label
     }()
     
+    private(set) lazy var downloadButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Download", for: .normal)
+        button.addTarget(self, action: #selector(onButtonPressed), for: .touchUpInside)
+        button.setTitleColor(UIColor.systemBlue, for: .normal)
+        return button
+    }()
+    
     // MARK: - Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -54,18 +65,31 @@ final class AppCell: UITableViewCell {
         self.titleLabel.text = cellModel.title
         self.subtitleLabel.text = cellModel.subtitle
         self.ratingLabel.text = cellModel.rating
+        
+        switch cellModel.downloadState {
+        case .notStarted:
+            self.downloadButton.setTitle("Download", for: .normal)
+        case .progress(let value):
+            let progress = value * 100
+            self.downloadButton.setTitle(String(format: "%.00f", progress), for: .normal)
+        case .downloaded:
+            self.downloadButton.setTitle("Open", for: .normal)
+        }
     }
     
     // MARK: - UI
     
     override func prepareForReuse() {
         [self.titleLabel, self.subtitleLabel, self.ratingLabel].forEach { $0.text = nil }
+        
+        self.downloadButton.setTitle("Download", for: .normal)
     }
     
     private func configureUI() {
         self.addTitleLabel()
         self.addSubtitleLabel()
         self.addRatingLabel()
+        self.addDownloadButton()
     }
     
     private func addTitleLabel() {
@@ -93,5 +117,19 @@ final class AppCell: UITableViewCell {
             self.ratingLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 12.0),
             self.ratingLabel.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -40.0)
             ])
+    }
+    
+    private func addDownloadButton() {
+        self.contentView.addSubview(self.downloadButton)
+        NSLayoutConstraint.activate([
+            self.downloadButton.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -16.0),
+            self.downloadButton.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
+            ])
+    }
+    
+    // MARK: - Actions
+    
+    @objc private func onButtonPressed() {
+        self.onDownloadButtonPressed?(self)
     }
 }

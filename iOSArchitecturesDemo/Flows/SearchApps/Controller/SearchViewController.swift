@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SearchViewController: UIViewController, SearchViewInput {
+final class SearchViewController: UIViewController {
     
     // MARK: - Private Properties
     
@@ -16,14 +16,14 @@ final class SearchViewController: UIViewController, SearchViewInput {
         return self.view as! SearchView
     }
     
-    private var searchResults = [ITunesApp]()
-    
     private struct Constants {
         static let reuseIdentifier = "reuseId"
     }
     
-    var output: SearchViewOutput!
+    var viewModel: SearchViewModel!
     
+    var displayItems: [AppCellModel] = []
+
     // MARK: - Lifecycle
     
     override func loadView() {
@@ -38,20 +38,36 @@ final class SearchViewController: UIViewController, SearchViewInput {
         self.searchView.tableView.register(AppCell.self, forCellReuseIdentifier: Constants.reuseIdentifier)
         self.searchView.tableView.delegate = self
         self.searchView.tableView.dataSource = self
+        
+        self.setupBindings()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.throbber(show: false)
+    // MARK: - Private
+    
+    private func setupBindings() {
+        self.viewModel.isLoading.addObserver(self) { isLoading, _ in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = isLoading
+        }
+        
+        self.viewModel.error.addObserver(self) { [weak self] error, _ in
+            guard let error = error else { return }
+            self?.showError(error)
+        }
+        
+        self.viewModel.showEmptyResult.addObserver(self) { [weak self] isVisible, _ in
+            self?.searchView.emptyResultView.isHidden = !isVisible
+        }
+        
+        self.viewModel.displayItems.addObserver(self) { [weak self] items, _ in
+            self?.displayItems = items
+            self?.searchView.tableView.isHidden = items.isEmpty
+            self?.searchView.tableView.reloadData()
+            
+            self?.searchView.searchBar.resignFirstResponder()
+        }
     }
     
-    // MARK: - SearchViewInput
-    
-    func throbber(show: Bool) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = show
-    }
-    
-    func showError(error: Error) {
+    func showError(_ error: Error) {
         let alert = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle: .alert)
         let actionOk = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(actionOk)
@@ -61,21 +77,13 @@ final class SearchViewController: UIViewController, SearchViewInput {
     func setEmptyStateVisible(_ isVisible: Bool) {
         self.searchView.emptyResultView.isHidden = !isVisible
     }
-    
-    func setSearchResultApps(_ apps: [ITunesApp]) {
-        self.searchResults = apps
-        self.searchView.tableView.isHidden = false
-        self.searchView.tableView.reloadData()
-        
-        self.searchView.searchBar.resignFirstResponder()
-    }
 }
 
 //MARK: - UITableViewDataSource
 extension SearchViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchResults.count
+        return self.displayItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -83,9 +91,14 @@ extension SearchViewController: UITableViewDataSource {
         guard let cell = dequeuedCell as? AppCell else {
             return dequeuedCell
         }
-        let app = self.searchResults[indexPath.row]
-        let cellModel = AppCellModelFactory.cellModel(from: app)
-        cell.configure(with: cellModel)
+        let item = self.displayItems[indexPath.row]
+        cell.configure(with: item)
+        
+        cell.onDownloadButtonPressed = { [unowned self] cell in
+            guard let indexPath = tableView.indexPath(for: cell) else { return }
+            let item = self.displayItems[indexPath.row]
+            self.viewModel.downloadApp(for: item)
+        }
         return cell
     }
 }
@@ -95,8 +108,8 @@ extension SearchViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let app = searchResults[indexPath.row]
-        self.output.openAppDetails(with: app)
+        let item = self.displayItems[indexPath.row]
+        self.viewModel.selectApp(item)
     }
 }
 
@@ -113,6 +126,6 @@ extension SearchViewController: UISearchBarDelegate {
             return
         }
         
-        self.output.requestApps(with: query)
+        self.viewModel.search(for: query)
     }
 }

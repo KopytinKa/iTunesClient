@@ -48,7 +48,7 @@ final class FakeDownloadAppsService: DownloadAppsServiceInput {
     //MARK: - Private
     
     private func startDownloading(for app: DownloadingApp) {
-        let timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [unowned self] timer in            
+        let timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [unowned self] timer in
             switch app.state {
             case .notStarted:
                 app.state = .progress(0.05)
