@@ -10,12 +10,16 @@ import UIKit
 
 enum SearchAssembly {
     static func build() -> SearchViewController {
-        let presenter = SearchPresenter()
         let viewController = SearchViewController()
         
+        let viewModel = SearchViewModel(
+            downloadingAppsService: FakeDownloadAppsService(),
+            searchService: ITunesSearchService()
+        )
+        
         // bindings
-        viewController.output = presenter
-        presenter.view = viewController
+        viewController.viewModel = viewModel
+        viewModel.viewController = viewController
         
         return viewController
     }
